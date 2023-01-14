@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Form</title>
+  <style>
+    /* CSS styling for form and table */
+    /* Adding own styling */
+    form {
+  width: 300px;
+  padding: 10px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+button {
+  background-color: #ff0000;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+  </style>
+</head>
+<body>
+  <form id="employeeForm">
+    <label>Name:</label>
+    <input type="text" id="name" required>
+    <br>
+    <label>Profession:</label>
+    <input type="text" id="profession" required>
+    <br>
+    <label>Age:</label>
+    <input type="number" id="age" required>
+    <br>
+    <button type="button" onclick="addEmployee()">Add Employee</button>
+  </form>
+  <br>
+  <div id="message"></div>
+  <br>
+  <table id="employeeTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Profession</th>
+        <th>Age</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody id="employeeList"></tbody>
+  </table>
+  <script>
+    let employeeArray = [];
+    let id = 1;
+    
+    function addEmployee() {
+      let name = document.getElementById("name").value;
+      let profession = document.getElementById("profession").value;
+      let age = document.getElementById("age").value;
+      
+      // validation
+      if (!name || !profession || !age) {
+        document.getElementById("message").innerHTML = '<p style="color: red;">Please fill in all fields</p>';
+        return;
+      }
+      
+      let employee = {
+        id: id,
+        name: name,
+        profession: profession,
+        age: age
+      };
+      
+      employeeArray.push(employee);
+      
+      id++;
+      
+      // clear form
+      document.getElementById("name").value = "";
+      document.getElementById("profession").value = "";
+      document.getElementById("age").value = "";
+      
+      document.getElementById("message").innerHTML = '<p style="color: green;">Employee added successfully</p>';
+      
+      // display employee in table
+      let employeeList = document.getElementById("employeeList");
+      employeeList.innerHTML += `
+        <tr>
+          <td>${employee.id}</td>
+          <td>${employee.name}</td>
+          <td>${employee.profession}</td>
+          <td>${employee.age}</td>
+          <td><button onclick="deleteEmployee(${employee.id})">Delete</button></td>
+        </tr>
+      `;
+    }
+    
+    function deleteEmployee(id) {
+      // remove employee from array
+      employeeArray = employeeArray.filter(employee => employee.id !== id);
+      
+      // remove employee from table
+      let employeeList = document.getElementById("employeeList");
+employeeList.innerHTML = "";
+
+  // re-populate table with updated array
+  employeeArray.forEach(employee => {
+    employeeList.innerHTML += `
+      <tr>
+        <td>${employee.id}</td>
+        <td>${employee.name}</td>
+        <td>${employee.profession}</td>
+        <td>${employee.age}</td>
+        <td><button onclick="deleteEmployee(${employee.id})">Delete</button></td>
+      </tr>
+    `;
+  });
+}
+</script>
+</body>
+</html>
